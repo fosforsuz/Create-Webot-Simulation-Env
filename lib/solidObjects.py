@@ -1,38 +1,13 @@
+from typing import overload
 import numpy as np
+import features as features
+from object3D import Object3D
+from lib.abstract import Instance
 
 
-class Features:
-    NAME: str = "\tname"
-    APPEARANCE: str = "\tappearance"
-    COORDINATE_SYSTEM: str = "\tcoordinateSystem \"NUE\"\n"
-    TRANSLATION: str = "\ttranslation"
-    ORIENTATION: str = "\torientation"
-    ROTATION: str = "\trotation"
-    POSITION: str = "\tposition"
-    TEXTURE: str = "\ttexture"
-    LUMINOSITY: str = "\tluminosity"
-    SCALE: str = "\tscale"
-    SIZE: str = "\tsize"
-    TILE_SIZE: str = "\ttileSize"
-    SKYBOX: str = "\tskybox"
-    CASTSHADOWS: str = "\tcastShadows"
-    CONTACT_MATERIAL: str = "\tcontactMaterial"
-    FLOOR_SIZE: str = "\tfloorSize"
-    ROTATION_STEP: str = "\trotationStep"
-    CHILDREN: str = "\tchildren"
-    PANELS_COUNT: str = "\tpanelsCount"
-    HIDDEN_POSITION: str = "\thidden position_0"
-    HIDDEN_ROTATION: str = "\thidden rotation_"
-
-
-class Transformation:
-    TRANSLATION: str = Features.TRANSLATION
-    ROTATION: str = Features.ROTATION
-
-
-class WorldInfo:
+class WorldInfo(Instance):
     ID: str = "WorldInfo"
-    COORDINATE_SYSTEM: str = Features.COORDINATE_SYSTEM
+    COORDINATE_SYSTEM: str = features.Features.COORDINATE_SYSTEM
 
     @staticmethod
     def get_instance() -> str:
@@ -41,10 +16,8 @@ class WorldInfo:
             + "}\n"
 
 
-class ViewPoint:
+class ViewPoint(Object3D, features.Positional3DFeatures):
     ID: str = "Viewpoint"
-    ORIENTATION: str = Features.ORIENTATION
-    POSITION: str = Features.POSITION
 
     @staticmethod
     def get_instance() -> str:
@@ -55,35 +28,29 @@ class ViewPoint:
                "}\n"
 
 
-class TexturedBackground:
+class TexturedBackground(features.TextureBase, Instance):
     ID: str = "TexturedBackground"
-    TEXTURE: str = Features.TEXTURE
-    LUMINOSITY: str = Features.LUMINOSITY
-    SKYBOX: str = Features.SKYBOX
 
     @staticmethod
     def get_instance() -> str:
         return f"{TexturedBackground.ID} {'{'} {'}'}\n"
 
 
-class TexturedBackgroundLight:
+class TexturedBackgroundLight(features.TextureBase, Instance):
     ID: str = "TexturedBackgroundLight"
-    TEXTURE: str = Features.TEXTURE
-    LUMINOSITY: str = Features.LUMINOSITY
-    CAST_SHADOWS: str = Features.CASTSHADOWS
 
     @staticmethod
     def get_instance() -> str:
         return f"{TexturedBackgroundLight.ID} {'{'} {'}'}\n"
 
 
-class RectangleArena(Transformation):
+class RectangleArena(features.features.Basic3DFeatures, Object3D):
     ID: str = "RectangleArena"
-    NAME: str = Features.NAME
-    CONTACT_MATERIAL: str = Features.CONTACT_MATERIAL
-    FLOOR_SIZE: str = Features.FLOOR_SIZE
+    CONTACT_MATERIAL: str = features.Features.CONTACT_MATERIAL
+    FLOOR_SIZE: str = features.Features.FLOOR_SIZE
 
     @staticmethod
+    @overload
     def get_instance(width: int, height: int, name: str) -> str:
         return f"{RectangleArena.ID} {'{'}\n" \
                f"{RectangleArena.NAME} \"{name}\" \n" \
@@ -92,14 +59,14 @@ class RectangleArena(Transformation):
                "}\n"
 
 
-class Floor(Transformation):
+class Floor(features.Basic3DFeatures, Object3D):
     ID: str = "Floor"
-    NAME: str = Features.NAME
-    SIZE: str = Features.SIZE
-    TILE_SIZE: str = Features.TILE_SIZE
-    CONTACT_MATERIAL: str = Features.CONTACT_MATERIAL
+    SIZE: str = features.Features.SIZE
+    TILE_SIZE: str = features.Features.TILE_SIZE
+    CONTACT_MATERIAL: str = features.Features.CONTACT_MATERIAL
 
     @staticmethod
+    @overload
     def get_instance(width: int, height: int, name: str) -> str:
         return f"{Floor.ID} {'{'}\n" \
                f"{Floor.NAME} \"{name}\" \n" \
@@ -107,20 +74,20 @@ class Floor(Transformation):
                f"{Floor.SIZE} {width} {height} \n"
 
 
-class Transform(Transformation):
+class Transform(features.Basic3DFeatures):
     ID: str = "Transform"
-    SCALE: str = Features.SCALE
-    ROTATION_STEP: str = Features.ROTATION_STEP
-    CHILDREN: str = Features.CHILDREN
+    SCALE: str = features.Features.SCALE
+    ROTATION_STEP: str = features.Features.ROTATION_STEP
+    CHILDREN: str = features.Features.CHILDREN
 
 
-class Panel(Transformation):
+class Panel(features.Basic3DFeatures, Object3D):
     ID: str = "Panel"
-    NAME: str = Features.NAME
-    SIZE: str = Features.SIZE
-    PANELS_COUNT: str = Features.PANELS_COUNT
+    SIZE: str = features.Features.SIZE
+    PANELS_COUNT: str = features.Features.PANELS_COUNT
 
     @staticmethod
+    @overload
     def get_instance(name: str, rotation: np.array, translation: np.array, size: np.array, panel_count: int) -> str:
         return f"{Panel.ID} {'{'}\n" \
                f"{Panel.NAME} \"{name}\" \n" \
@@ -131,11 +98,11 @@ class Panel(Transformation):
                "}\n"
 
 
-class WashingMachine(Transformation):
+class WashingMachine(features.Basic3DFeatures, Object3D):
     ID: str = "WashingMachine"
-    NAME: str = Features.NAME
 
     @staticmethod
+    @overload
     def get_instance(name: str, rotation: np.array, translation: np.array) -> str:
         return f"{WashingMachine.ID} {'{'}\n" \
                f"{WashingMachine.NAME} \"{name}\" \n" \
@@ -144,9 +111,9 @@ class WashingMachine(Transformation):
                "}\n"
 
 
-class Bed(Transformation):
+class Bed(features.Basic3DFeatures):
     ID: str = "Bed"
-    NAME: str = Features.NAME
+    NAME: str = features.Features.NAME
 
     @staticmethod
     def get_instance(name: str, rotation: np.array, translation: np.array) -> str:
@@ -157,9 +124,9 @@ class Bed(Transformation):
                "}\n"
 
 
-class Desk(Transformation):
+class Desk(features.Basic3DFeatures):
     ID: str = "Desk"
-    NAME: str = Features.NAME
+    NAME: str = features.Features.NAME
 
     @staticmethod
     def get_instance(name: str, rotation: np.array, translation: np.array) -> str:
@@ -170,11 +137,11 @@ class Desk(Transformation):
                "}\n"
 
 
-class Fridge(Transformation):
+class Fridge(features.Basic3DFeatures):
     ID: str = "Fridge"
-    NAME: str = Features.NAME
-    HIDDEN_POSITION: str = Features.HIDDEN_POSITION
-    HIDDEN_ROTATION: str = Features.HIDDEN_ROTATION
+    NAME: str = features.Features.NAME
+    HIDDEN_POSITION: str = features.Features.HIDDEN_POSITION
+    HIDDEN_ROTATION: str = features.Features.HIDDEN_ROTATION
 
     @staticmethod
     def get_instance(name: str, rotation: np.array, translation: np.array, hidden_rotation: np.array,
@@ -188,20 +155,27 @@ class Fridge(Transformation):
                "}\n"
 
 
-class Wall:
+class Wall(features.Basic3DFeatures):
     ID: str = "Wall"
+    NAME: str = features.Features.NAME
+    SIZE: str = features.Features.SIZE
+    APPEARANCE: str = features.Features.APPEARANCE
+
+    @staticmethod
+    def get_instance(name: str, translation: np.array, rotation: np.array, size: np.array) -> str:
+        return f"{Wall.ID} {'{'}\n" \
+               f"{Wall.NAME} \"wall\" \n" \
+               f"{Wall.TRANSLATION} \n" \
+               f"{Wall.ROTATION} \n" \
+               f"{Wall.SIZE} \n" \
+               f"{Wall.APPEARANCE} \n" \
+               "}\n"
 
 
-class MainElements:
-    WORLD_INFO = WorldInfo
-    VIEW_POINT = ViewPoint
-    TEXTURED_BACKGROUND = TexturedBackground
-    TEXTURED_BACKGROUND_LIGHT = TexturedBackgroundLight
-    RECTANGLE_ARENA = RectangleArena
-    FLOOR = Floor
-    TRANSFORM = Transform
-    PANEL = Panel
-    BED = Bed
-    DESK = Desk
-    FRIDGE = Fridge
-    WALL = Wall
+class Door:  # -> Daha sonra Eklenebilir. Simdilik gerek yok.
+    pass
+
+
+class Radiator(features.Basic3DFeatures):
+    ID: str = "Radiator"
+    NAME: str = features.Features.NAME

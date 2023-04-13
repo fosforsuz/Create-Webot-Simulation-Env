@@ -3,6 +3,11 @@ from create_env import CreateEnv
 from utility import create_folder_structure
 import argparse
 
+
+def print_world_infoes(world: World) -> None:
+    print(f"\n{world}\n")
+
+
 if __name__ == "__main__":
     world = World()
     parser = argparse.ArgumentParser(description="Bu script ile rastgele bir webots dünyası oluşturabilirsiniz.")
@@ -18,5 +23,7 @@ if __name__ == "__main__":
     world.count = parser.parse_args().count
 
     world.world_file_path = create_folder_structure(world.name)  # Burada dünyanın dosya yolunu alıyoruz.
+    
+    print_world_infoes(world)
 
     env = CreateEnv(world)
