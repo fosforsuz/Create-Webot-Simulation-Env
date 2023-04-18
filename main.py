@@ -1,6 +1,6 @@
-from world import World
+from models.world import World
 from create_env import CreateEnv
-from utility import create_folder_structure
+from lib.utility import create_folder_structure
 import argparse
 
 
@@ -25,5 +25,11 @@ if __name__ == "__main__":
     world.world_file_path = create_folder_structure(world.name)  # Burada dünyanın dosya yolunu alıyoruz.
     
     print_world_infoes(world)
-
     env = CreateEnv(world)
+    
+    env.open_file()
+    env.create_world_base()
+
+    for i in range(int(world.count)):
+        env.create_world(i)
+        env.create_ceiling(i+1)

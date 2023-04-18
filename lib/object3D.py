@@ -1,28 +1,48 @@
-from typing import overload
-from features import Features
-from abstract import Instance
+from models.world import World
+import numpy as np
+from lib.features_parents import Features
+from lib.propertyGenerator import ObjectPropertiesGenerator
 
-class Object3D(Instance):
+class Object3D:
+    OPEN_SECTION = "{\n"
+    CLOSE_SECTION = "}\n"
+    
+    @staticmethod
+    def return_panel_count() -> str:
+        count = ObjectPropertiesGenerator.create_panel_count()
+        return f"{Features.PANELS_COUNT} {count} \n"
+    
+    
+    @staticmethod
+    def return_size() -> str:
+        x, y, z =ObjectPropertiesGenerator.create_size()
+        return f"{Features.SIZE} {x} {y} {z} \n"
+    
     
     @staticmethod 
-    def create_translation(x: float, y: float, z: float) -> str:
+    def return_translation(physics: bool=False) -> str:
+        x, y, z = ObjectPropertiesGenerator.create_translation(physics)
         return f"{Features.TRANSLATION} {x} {y} {z} \n"
 
     
     @staticmethod
-    def create_rotation(self, x: float, y: float, z: float, angle: float) -> str:
+    def return_rotation(physics: bool=False) -> str:
+        x, y, z, angle = ObjectPropertiesGenerator.create_rotation(physics)
         return f"{Features.ROTATION} {x} {y} {z} {angle} \n"
 
     
     @staticmethod
-    def create_name(name: str) -> str:
-        return f"{Features.NAME} \"{name}\" \n"
-
-
-    @staticmethod
-    @overload
-    def get_instance() -> str:
-        # This is the overload for the default get_instance() method
-        pass
-        
+    def return_name(id: str, object_count: int) -> str:
+        return f"{Features.NAME} \"{id}({object_count})\" \n"
     
+    @staticmethod
+    def return_physics() -> str:
+        return "\tphysics Physics {\n}"
+    
+    @staticmethod
+    def return_number_of_pins() -> str:
+        return f"{Features.NUMBEROFFINS} {ObjectPropertiesGenerator.return_random_int()} \n"
+    
+    @staticmethod
+    def return_number_of_step() -> str:
+        return f"{Features.STEP_SIZE} {ObjectPropertiesGenerator.return_random_int()} \n"

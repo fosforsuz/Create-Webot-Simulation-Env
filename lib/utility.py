@@ -1,6 +1,7 @@
 import os
-import external_libraries
-from commonEnums import FolderStructure
+import lib.external_libraries as external_libraries
+from lib.folderStructure import FolderStructure
+from models.mainElements import MainElements
 
 
 def show_exists_info(folder_name: str):
@@ -39,3 +40,4 @@ def prepare_template(path: str, file_name: str):
 def create_main_structure(path: str, template):
     with open(path, 'a') as file:
         file.write(f"{template}\n")
+        
