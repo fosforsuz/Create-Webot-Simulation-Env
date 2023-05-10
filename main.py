@@ -27,9 +27,4 @@ if __name__ == "__main__":
     print_world_infoes(world)
     env = CreateEnv(world)
     
-    env.open_file()
-    env.create_world_base()
 
-    for i in range(int(world.count)):
-        env.create_world(i)
-        env.create_ceiling(i+1)

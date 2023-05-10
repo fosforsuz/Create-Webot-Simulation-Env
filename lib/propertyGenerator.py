@@ -9,6 +9,7 @@ class ObjectPropertiesGenerator:
     
     @staticmethod
     def create_translation(physics: bool=False) -> tuple:
+
         x = np.random.randint(-1/2 * ObjectPropertiesGenerator.world.width + 0.5 , 1/2 * ObjectPropertiesGenerator.world.width - 0.5)
         y = np.random.randint(-1/2 * ObjectPropertiesGenerator.world.length + 0.5 , 1/2 * ObjectPropertiesGenerator.world.length - 0.5)
         z = 0.1

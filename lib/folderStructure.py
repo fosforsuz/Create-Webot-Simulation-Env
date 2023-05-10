@@ -1,10 +1,9 @@
 from enum import Enum
-from dataclasses import dataclass
-import os
+import pathlib
 
 
 class FolderStructure(Enum):
-    CURRENT_DIRECTORY = os.getcwd()
+    CURRENT_DIRECTORY = pathlib.Path.home()
     LIBRARY_PATH = "libraries"
     CONTROLLERS_PATH = "controllers"
     PLUGINS_PATH = "plugins"

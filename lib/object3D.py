@@ -37,7 +37,11 @@ class Object3D:
     
     @staticmethod
     def return_physics() -> str:
-        return "\tphysics Physics {\n}"
+        return "\tphysics Physics {\n\t}\n"
+    
+    @staticmethod
+    def return_enable_physics() -> str:
+        return "\tenablePhysics TRUE\n"
     
     @staticmethod
     def return_number_of_pins() -> str:

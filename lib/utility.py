@@ -1,7 +1,6 @@
 import os
 import lib.external_libraries as external_libraries
 from lib.folderStructure import FolderStructure
-from models.mainElements import MainElements
 
 
 def show_exists_info(folder_name: str):

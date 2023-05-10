@@ -1,133 +1,112 @@
 from io import TextIOWrapper
 from models.world import World
-from models.mainElements import MainElements
+from models.mainElements import SceneSettings, BuildingMaterial
+from models.homeStuff import HomeStuff
 from lib.external_libraries import create_ground
 from lib.propertyGenerator import ObjectPropertiesGenerator
 import numpy as np
 
 
 class CreateEnv:
-
-    def __init__(self, world):
+    def __init__(self, world: World):
         self.world: World = world
-
-        self.constructor: list = ["CEILING", "FLOOR",
-                                    "STAIRS", "RECTANGLE_ARENA", "WALL"]
-
-        self.solidObjects: list = ["WORLD_INFO", "VIEW_POINT",
-                                    "TEXTURED_BACKGROUND", "TEXTURED_BACKGROUND_LIGHT", "TRANSFORM"]
-
-        self.objects: list = [item for item in MainElements.__iterate_key__(
-        ) if item not in self.constructor + self.solidObjects]
-        
-        ObjectPropertiesGenerator.world = self.world
-
-        self.object_counter: int = 0
-
-    def open_file(self) -> TextIOWrapper:
-        self.file = open(self.world.world_file_path, "a")
-        return self.file
-
-    def write_to_file(self, text: str) -> None:
-        self.file.write(text)
-
-    def increment_object_number(self) -> None:
-        self.object_counter += 1
-
-    def object_orientation(self, object_name: str, number_of_floor: int=0) -> str:
-        self.increment_object_number()
-        match object_name:
+        self.object_count: int = 0
+        ObjectPropertiesGenerator.world = world
+        self.open_file()
+        self.get_object_names()
+        self.create_total_object_count = np.random.randint(world.length * world.width * 0.3, world.length * world.width * 0.5)
+    
+    def get_building_material(self, object_id: str, number_of_floor:int) -> str:
+        match object_id:
             case "WORLD_INFO":
-                return MainElements.WORLD_INFO.get_instance()
-
-            case "TEXTURED_BACKGROUND":
-                return MainElements.TEXTURED_BACKGROUND.get_instance()
-
-            case "TEXTURED_BACKGROUND_LIGHT":
-                return MainElements.TEXTURED_BACKGROUND_LIGHT.get_instance()
-
+                return SceneSettings.WORLD_INFO.get_instance()
             case "VIEW_POINT":
-                return MainElements.VIEW_POINT.get_instance()
-
+                return SceneSettings.VIEW_POINT.get_instance()
+            case "TEXTURED_BACKGROUND":
+                return SceneSettings.TEXTURED_BACKGROUND.get_instance()
+            case "TEXTURED_BACKGROUND_LIGHT":
+                return SceneSettings.TEXTURED_BACKGROUND_LIGHT.get_instance()
+            case "GROUND":
+                return SceneSettings.GROUND
+            case "WALL":
+                return BuildingMaterial.WALL.get_instance(object_count=self.object_count, number_of_floor=number_of_floor)
             case "RECTANGLE_ARENA":
-                return MainElements.RECTANGLE_ARENA.get_instance(height=self.world.length, width=self.world.width, object_count=self.object_counter)
-
-            case "FLOOR":
-                return MainElements.FLOOR.get_instance(object_count=self.object_counter, width=self.world.width, length=self.world.length)
-
+                return BuildingMaterial.RECTANGLE_ARENA.get_instance(width=self.world.width, height=self.world.length, object_count=self.object_count)
+            case "STAIRS":
+                return BuildingMaterial.STAIRS.get_instance(object_count=self.object_count, number_of_floor=number_of_floor)
             case "CEILING":
-                return MainElements.CEILING.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "PANEL":
-                return MainElements.PANEL.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-            
-            case "FRIDGE":
-                return MainElements.FRIDGE.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "BED":
-                return MainElements.BED.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "DESK":
-                return MainElements.DESK.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
+                return BuildingMaterial.CEILING.get_instance(object_count=self.object_count, number_of_floor=number_of_floor)
+            case "FLOOR":
+                return BuildingMaterial.FLOOR.get_instance(width=self.world.width, length=self.world.length,object_count=self.object_count)
+            case "PHOTO_FRAME":
+                return HomeStuff.PHOTO_FRAME.get_instance(object_count=self.object_count)
             case "CHAIR":
-                return MainElements.CHAIR.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
+                return HomeStuff.CHAIR.get_instance(object_count=self.object_count)
+            case "OFFICE_CHAIR":
+                return HomeStuff.OFFICE_CHAIR.get_instance(object_count=self.object_count)
+            case "WOODEN_CHAIR":
+                return HomeStuff.WOODEN_CHAIR.get_instance(object_count=self.object_count)
+            case "BARBECUE":
+                return HomeStuff.BARBECUE.get_instance(object_count=self.object_count)
+            case "GNOME": 
+                return HomeStuff.GNOME.get_instance(object_count=self.object_count)
+            case "WATERING_CAN":
+                return HomeStuff.WATERING_CAN.get_instance(object_count=self.object_count)
+            case "WHEEL_BARROW":
+                return HomeStuff.WHEEL_BARROW.get_instance(object_count=self.object_count)
+            case "MEDICINE_BOTTLE":
+                return HomeStuff.MEDICINE_BOTTLE.get_instance(object_count=self.object_count)
+            case "FLOOR_LIGHT":
+                return HomeStuff.FLOOR_LIGHT.get_instance(object_count=self.object_count)
+            case "SOFA":
+                return HomeStuff.SOFA.get_instance(object_count=self.object_count)
+            case "ARM_CHAIR":
+                return HomeStuff.ARM_CHAIR.get_instance(object_count=self.object_count)
+            case "MIRROR":
+                return HomeStuff.MIRROR.get_instance(object_count=self.object_count)
+            case "BUNCH_OF_FLOWERS":
+                return HomeStuff.BUNCH_OF_FLOWERS.get_instance(object_count=self.object_count)
+            case "FLOWER_POT":
+                return HomeStuff.FLOWER_POT.get_instance(object_count=self.object_count)
+            case "DESK":
+                return HomeStuff.DESK.get_instance(object_count=self.object_count)
+            case "ROUND_TABLE":
+                return HomeStuff.ROUND_TABLE.get_instance(object_count=self.object_count)
+            case "OFFICE_TELEPHONE":
+                return HomeStuff.OFFICE_TELEPHONE.get_instance(object_count=self.object_count)
+            case "POTTED_TREE":
+                return HomeStuff.POTTED_TREE.get_instance(object_count=self.object_count)
 
-            case "RADIATOR":
-                return MainElements.RADIATOR.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
+    def get_object_names(self):
+        self.scene_settings = [x for x in SceneSettings.__iterate_key__()]
+        self.building_materials = [x for x in BuildingMaterial.__iterate_key__()]
+        self.home_stuff = [x for x in HomeStuff.__iterate_key__()]
 
-            case "TELEVISION":
-                return MainElements.TELEVISION.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
+    def open_file(self):
+        self.file = open(self.world.world_file_path, 'a')
 
-            case "BOOK":
-                return MainElements.BOOK.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "CLOCK":
-                return MainElements.CLOCK.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "LANDSCAPE_PAINTING":
-                return MainElements.LANDSCAPE_PAINTING.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "BATHROOM_SINK":
-                return MainElements.BATHROOM_SINK.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "TOILET":
-                return MainElements.TOILET.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "BATH_TUBE":
-                return MainElements.BATH_TUBE.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "CABINET":
-                return MainElements.CABINET.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-
-            case "OVEN":
-                return MainElements.OVEN.get_instance(object_count=self.object_counter, number_of_floor=number_of_floor)
-            case "CREATE_GROUND":
-                return create_ground
-
-    def create_world_base(self) -> None:
-        main_elements: list = ["WORLD_INFO", "VIEW_POINT",
-                                "TEXTURED_BACKGROUND", "TEXTURED_BACKGROUND_LIGHT", "FLOOR", "CREATE_GROUND"]
-        for element in main_elements:
-            text = self.object_orientation(element)
-            self.write_to_file(text=text)
-
-        del main_elements
-        del text
+    def write_to_file(self, text: str):
+        self.file.write(text)
     
     
-    def create_elements(self, number_of_floor: int) -> None:
-        random_object = np.random.choice(self.objects)
-        text = self.object_orientation(random_object, number_of_floor)
-        self.write_to_file(text=text)
+    def close_file(self):
+        self.file.close()
+    
+    def create_scene_settings(self):
+        for material in self.scene_settings:
+            if material != "TRANSFORM":
+                self.write_to_file(self.get_building_material(material, 0))
+                self.object_count += 1
+        self.write_to_file(self.get_building_material("FLOOR", 0))
+    
+    
+    def create_materials(self):
+        counter: int = 0
+        while counter < self.create_total_object_count:
+            material = self.home_stuff[np.random.randint(0, len(self.home_stuff))]
+            self.write_to_file(self.get_building_material(material, 0))
+            self.object_count += 1
+            counter += 1
     
 
 
-    def create_world(self, number_of_floor: int) -> None:
-        iteration_count = ObjectPropertiesGenerator.return_object_number()
-        for i in range(0, iteration_count):
-            self.create_elements(number_of_floor)
-    
-    
-    def create_ceiling(self, number_of_floor: int) -> None:
-        self.write_to_file(text=self.object_orientation("CEILING", number_of_floor))

@@ -60,7 +60,7 @@ class RectangleArena(Features.Basic3DFeatures, Instance):
             + f"{RectangleArena.ROTATION} 0 0 1 0\n" \
             + f"{RectangleArena.TRANSLATION} 0 0 0\n" \
             + f"{RectangleArena.FLOOR_SIZE} {width} {height} \n" \
-            + + Object3D.CLOSE_SECTION
+            + Object3D.CLOSE_SECTION
 
 
 class Floor(Features.Basic3DFeatures, Instance):
