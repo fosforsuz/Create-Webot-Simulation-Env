@@ -49,14 +49,15 @@ class SimulationApp(customtkinter.CTk):
         self.length_entry.place(relx=0.65, rely=0.5, anchor="center")
 
         # Create Number of Floors Label
-        self.number_of_floors_label = customtkinter.CTkLabel(
-            master=self, text="Kat Sayısı", font=("Arial", 20), corner_radius=8)
-        self.number_of_floors_label.place(relx=0.35, rely=0.6, anchor="center")
+        # self.number_of_floors_label = customtkinter.CTkLabel(
+        #     master=self, text="Kat Sayısı", font=("Arial", 20), corner_radius=8)
+        # self.number_of_floors_label.place(relx=0.35, rely=0.6, anchor="center")
 
+        """
         # Create Number of Floors Entry
         self.number_of_floors_entry = customtkinter.CTkEntry(
             master=self, font=("Arial", 20), corner_radius=8)
-        self.number_of_floors_entry.place(relx=0.65, rely=0.6, anchor="center")
+        self.number_of_floors_entry.place(relx=0.65, rely=0.6, anchor="center")"""
 
         # Create Button
         self.button = customtkinter.CTkButton(master=self, text="Oluştur", font=(
@@ -64,7 +65,7 @@ class SimulationApp(customtkinter.CTk):
         self.button.place(relx=0.5, rely=0.8, anchor="center")
 
     def button_handler(self):
-        if self.world_name_entry.get() == "" or self.width_entry.get() == "" or self.length_entry.get() == "" or self.number_of_floors_entry.get() == "":
+        if self.world_name_entry.get() == "" or self.width_entry.get() == "" or self.length_entry.get() == "" """ or self.number_of_floors_entry.get() == """"":
             self.error_message = customtkinter.CTkLabel(
                 master=self, text="Lütfen tüm alanları doldurunuz.", font=("Arial", 20), corner_radius=8, bg_color="red")
             self.error_message.place(relx=0.5, rely=0.9, anchor="center")
@@ -85,8 +86,8 @@ class SimulationApp(customtkinter.CTk):
         if not self.is_alpha(self.length_entry.get()):
             control = True
 
-        if not self.is_alpha(self.number_of_floors_entry.get()):
-            control = True
+        # if not self.is_alpha(self.number_of_floors_entry.get()):
+        #     control = True
 
         if control:
             self.error_message = customtkinter.CTkLabel(
@@ -116,7 +117,8 @@ class SimulationApp(customtkinter.CTk):
         self.world.name = self.world_name_entry.get()
         self.world.width = int(self.width_entry.get())
         self.world.length = int(self.length_entry.get())
-        self.world.count = int(self.number_of_floors_entry.get())
+        """int(self.number_of_floors_entry.get())"""
+        self.world.count = 1
         self.world.world_file_path = create_folder_structure(self.world.name)
         
     def create_env_variables(self) -> None:
@@ -125,6 +127,7 @@ class SimulationApp(customtkinter.CTk):
     def create_simulation(self) -> None:
         self.create_variables()
         self.env.create_scene_settings()
+        self.env.create_walls()
         self.env.create_materials()
     
 

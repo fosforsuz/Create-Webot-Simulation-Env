@@ -17,6 +17,13 @@ class ObjectPropertiesGenerator:
             z = np.random.randint(0, 4)
         return x, y, z
     
+    @staticmethod
+    def create_translation_wall() -> tuple:
+        x = np.random.randint(-1/2 * ObjectPropertiesGenerator.world.width + 0.5 , 1/2 * ObjectPropertiesGenerator.world.width - 0.5)
+        y = np.random.randint(-1/2 * ObjectPropertiesGenerator.world.length + 0.5 , 1/2 * ObjectPropertiesGenerator.world.length - 0.5)
+        z = 0
+        return x, y, z
+    
     
     @staticmethod
     def create_rotation(physics: bool=False) -> tuple:
@@ -25,7 +32,8 @@ class ObjectPropertiesGenerator:
         z = np.random.uniform(-3, 3)
         angle = np.random.uniform(-3, 3)
         return x, y, z, angle
-    
+
+
     
     @staticmethod
     def create_panel_count() -> int:

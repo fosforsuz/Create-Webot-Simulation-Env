@@ -29,7 +29,7 @@ class CreateEnv:
             case "GROUND":
                 return SceneSettings.GROUND
             case "WALL":
-                return BuildingMaterial.WALL.get_instance(object_count=self.object_count, number_of_floor=number_of_floor)
+                return BuildingMaterial.WALL.get_instance(object_count=self.object_count)
             case "RECTANGLE_ARENA":
                 return BuildingMaterial.RECTANGLE_ARENA.get_instance(width=self.world.width, height=self.world.length, object_count=self.object_count)
             case "STAIRS":
@@ -98,7 +98,16 @@ class CreateEnv:
                 self.write_to_file(self.get_building_material(material, 0))
                 self.object_count += 1
         self.write_to_file(self.get_building_material("FLOOR", 0))
+        
     
+    def create_walls(self):
+        count = (self.world.width * self.world.length) / 4
+        counter: int = 0
+        while counter < count:
+            self.write_to_file(self.get_building_material("WALL", 0))
+            self.object_count += 1
+            counter += 1
+            
     
     def create_materials(self):
         counter: int = 0

@@ -50,3 +50,25 @@ class Object3D:
     @staticmethod
     def return_number_of_step() -> str:
         return f"{Features.STEP_SIZE} {ObjectPropertiesGenerator.return_random_int()} \n"
+    
+    @staticmethod
+    def return_rotation_of_wall() -> str:
+        x, y, z, angle = ObjectPropertiesGenerator.create_rotation()
+        return f"\t{Features.ORIENTATION} {x} {y} {z} {angle} \n"
+    
+    @staticmethod
+    def return_size_of_wall() -> str:
+        return f"\t{Features.SIZE} 0.5 1 0.2 \n"
+    
+    @staticmethod
+    def return_translation_of_wall() -> str:
+        x, y, z = ObjectPropertiesGenerator.create_translation_wall()
+        return f"\t{Features.TRANSLATION} {x} {y} {z} \n"
+    
+    @staticmethod
+    def return_bounding_object() -> str:
+        return "\tboundingObject Box { \n" \
+            + "\t\tsize 0.1 0.1 0.1\n" \
+            +  "}\n"
+    
+    
